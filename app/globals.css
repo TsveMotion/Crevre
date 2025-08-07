@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8941f;
+}
+
+/* Selection styling */
+::selection {
+  background: #D4AF37;
+  color: #0a0a0a;
+}
+
+/* Custom button styles */
+@layer components {
+  .btn-primary {
+    @apply bg-crevre-gold text-crevre-black px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:bg-yellow-300 hover:shadow-2xl hover:scale-105 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-crevre-gold text-crevre-gold px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-crevre-gold hover:text-crevre-black;
+  }
+  
+  .input-field {
+    @apply bg-crevre-gray border border-gray-600 text-white px-4 py-4 rounded-lg text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-crevre-gold focus:border-transparent transition-all duration-300;
+  }
+  
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16 xl:px-24;
+  }
+}
