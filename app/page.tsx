@@ -1,10 +1,8 @@
 import React from 'react'
 import Header from '../components/Header'
 import HeroSection from '../components/HeroSection'
-import VisualShowcase from '../components/VisualShowcase'
-import EmailSignupForm from '../components/EmailSignupForm'
+import ProductShowcase from '../components/ProductShowcase'
 import ValueProposition from '../components/ValueProposition'
-import SocialProof from '../components/SocialProof'
 import Footer from '../components/Footer'
 
 export default function Home() {
@@ -12,10 +10,8 @@ export default function Home() {
     <main className="min-h-screen bg-crevre-white">
       <Header />
       <HeroSection />
-      <VisualShowcase />
-      <EmailSignupForm />
+      <ProductShowcase />
       <ValueProposition />
-      <SocialProof />
       <Footer />
     </main>
   )

@@ -29,6 +29,13 @@ export interface ProductDoc {
     quantity?: number
   }
   status: 'active' | 'draft' | 'archived'
+  saleStatus: 'for-sale' | 'preview-only'
+  seo: {
+    title: string
+    description: string
+    keywords: string[]
+    slug: string
+  }
   createdAt: Date
   updatedAt: Date
   featured: boolean

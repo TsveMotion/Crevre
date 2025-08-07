@@ -83,7 +83,14 @@ export async function POST(request: NextRequest) {
         quantity: productData.inventory?.quantity || 0
       },
       status: productData.status || 'draft',
+      saleStatus: productData.saleStatus || 'preview-only',
       featured: productData.featured || false,
+      seo: {
+        title: productData.seo?.title || '',
+        description: productData.seo?.description || '',
+        keywords: productData.seo?.keywords || [],
+        slug: productData.seo?.slug || productData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      },
       tags: productData.tags || [],
       createdAt: new Date(),
       updatedAt: new Date()

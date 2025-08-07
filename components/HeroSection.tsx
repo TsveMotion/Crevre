@@ -1,12 +1,46 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
+import LaunchCountdown from './LaunchCountdown'
 
 const HeroSection = () => {
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [message, setMessage] = useState('')
+
   const scrollToForm = () => {
     const formElement = document.getElementById('signup-form')
     formElement?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email, 
+          source: 'hero_signup' 
+        }),
+      })
+
+      if (response.ok) {
+        setMessage('🎉 Welcome! You\'re on the exclusive launch list.')
+        setEmail('')
+      } else {
+        setMessage('Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      setMessage('Something went wrong. Please try again.')
+    }
+    setIsSubmitting(false)
   }
 
   return (
@@ -38,19 +72,43 @@ const HeroSection = () => {
             Discover Timeless Elegance in Contemporary Fashion
           </p>
 
-          {/* Launch Date */}
-          <div className="inline-block bg-crevre-gold/10 border border-crevre-gold/30 rounded-sm px-8 py-4 mb-12 shadow-sm">
-            <p className="text-crevre-gold font-medium text-lg tracking-wide">
-              ✨ Launching August 9th • Exclusive Collection
-            </p>
+          {/* Launch Countdown */}
+          <LaunchCountdown />
+
+          {/* Email Signup Form */}
+          <div className="max-w-lg mx-auto mb-8 hero-email-input">
+            <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-4">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email for exclusive access"
+                className="flex-1 px-6 py-5 bg-white/90 border border-crevre-gold/30 rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/60 focus:outline-none focus:ring-2 focus:ring-crevre-gold focus:border-transparent text-xl shadow-sm font-medium"
+                required
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn-primary text-lg px-8 py-4 whitespace-nowrap disabled:opacity-50"
+              >
+                {isSubmitting ? 'Joining...' : 'Join Launch List'}
+              </button>
+            </form>
+            {message && (
+              <p className={`mt-3 text-center font-medium ${
+                message.includes('🎉') ? 'text-green-600' : 'text-red-500'
+              }`}>
+                {message}
+              </p>
+            )}
           </div>
 
-          {/* CTA Button */}
+          {/* Secondary CTA */}
           <button
             onClick={scrollToForm}
-            className="btn-primary text-xl px-12 py-5 animate-slide-up"
+            className="text-crevre-gold hover:text-crevre-gold-dark transition-colors duration-300 text-lg font-medium underline underline-offset-4"
           >
-            Join the Drop List
+            Learn More About Collection
           </button>
 
           {/* Trust Indicators */}

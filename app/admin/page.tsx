@@ -10,7 +10,15 @@ interface Product {
   price: number
   category: string
   status: 'active' | 'draft' | 'archived'
+  saleStatus: 'for-sale' | 'preview-only'
   featured: boolean
+  images: string[]
+  seo: {
+    title: string
+    description: string
+    keywords: string[]
+    slug: string
+  }
   createdAt: string
   updatedAt: string
 }
@@ -40,14 +48,30 @@ const AdminPage = () => {
     price: string;
     category: string;
     status: 'active' | 'draft' | 'archived';
+    saleStatus: 'for-sale' | 'preview-only';
     featured: boolean;
+    images: string[];
+    seo: {
+      title: string;
+      description: string;
+      keywords: string;
+      slug: string;
+    };
   }>({
     name: '',
     description: '',
     price: '',
     category: 'clothing',
     status: 'draft',
-    featured: false
+    saleStatus: 'preview-only',
+    featured: false,
+    images: [],
+    seo: {
+      title: '',
+      description: '',
+      keywords: '',
+      slug: ''
+    }
   })
 
   // Check authentication on mount
@@ -114,12 +138,20 @@ const AdminPage = () => {
       const url = editingProduct ? `/api/products/${editingProduct._id}` : '/api/products'
       const method = editingProduct ? 'PUT' : 'POST'
 
+      // Generate slug from name if not provided
+      const slug = productForm.seo.slug || productForm.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...productForm,
-          price: parseFloat(productForm.price)
+          price: parseFloat(productForm.price),
+          seo: {
+            ...productForm.seo,
+            slug,
+            keywords: productForm.seo.keywords.split(',').map(k => k.trim()).filter(k => k)
+          }
         })
       })
 
@@ -137,6 +169,43 @@ const AdminPage = () => {
     setLoading(false)
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    const formData = new FormData()
+    Array.from(files).forEach((file) => {
+      formData.append('images', file)
+    })
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setProductForm({
+          ...productForm,
+          images: [...productForm.images, ...data.urls]
+        })
+      } else {
+        alert('Failed to upload images')
+      }
+    } catch (error) {
+      console.error('Image upload error:', error)
+      alert('Failed to upload images')
+    }
+  }
+
+  const removeImage = (index: number) => {
+    setProductForm({
+      ...productForm,
+      images: productForm.images.filter((_, i) => i !== index)
+    })
+  }
+
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product)
     setProductForm({
@@ -145,7 +214,15 @@ const AdminPage = () => {
       price: product.price.toString(),
       category: product.category,
       status: product.status,
-      featured: product.featured
+      saleStatus: product.saleStatus || 'preview-only',
+      featured: product.featured,
+      images: product.images || [],
+      seo: {
+        title: product.seo?.title || '',
+        description: product.seo?.description || '',
+        keywords: product.seo?.keywords?.join(', ') || '',
+        slug: product.seo?.slug || ''
+      }
     })
     setShowProductForm(true)
   }
@@ -176,7 +253,15 @@ const AdminPage = () => {
       price: '',
       category: 'clothing',
       status: 'draft',
-      featured: false
+      saleStatus: 'preview-only',
+      featured: false,
+      images: [],
+      seo: {
+        title: '',
+        description: '',
+        keywords: '',
+        slug: ''
+      }
     })
     setEditingProduct(null)
     setShowProductForm(false)
@@ -401,43 +486,84 @@ const AdminPage = () => {
         {/* Product Form Modal */}
         {showProductForm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-crevre-white rounded-sm p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-crevre-white rounded-sm p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <h3 className="text-2xl font-display font-semibold text-crevre-charcoal mb-6">
                 {editingProduct ? 'Edit Product' : 'Add New Product'}
               </h3>
               
               <form onSubmit={handleProductSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-crevre-charcoal mb-2">
-                    Product Name
-                  </label>
-                  <input
-                    type="text"
-                    value={productForm.name}
-                    onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
-                    placeholder="Enter product name"
-                    required
-                  />
+                {/* Basic Product Information */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                      Product Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={productForm.name}
+                      onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                      placeholder="Enter product name"
+                      required
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      value={productForm.description}
+                      onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                      placeholder="Enter product description"
+                      rows={3}
+                    />
+                  </div>
                 </div>
 
+                {/* Product Images */}
                 <div>
                   <label className="block text-sm font-medium text-crevre-charcoal mb-2">
-                    Description
+                    Product Images
                   </label>
-                  <textarea
-                    value={productForm.description}
-                    onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
-                    placeholder="Enter product description"
-                    rows={3}
-                  />
+                  <div className="space-y-4">
+                    {productForm.images.length > 0 && (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {productForm.images.map((image, index) => (
+                          <div key={index} className="relative group">
+                            <img
+                              src={image}
+                              alt={`Product ${index + 1}`}
+                              className="w-full h-24 object-cover rounded-sm border border-crevre-gold/20"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeImage(index)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="w-full px-4 py-3 border-2 border-dashed border-crevre-gold/30 focus:border-crevre-gold rounded-sm text-crevre-charcoal transition-all duration-300 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-medium file:bg-crevre-gold file:text-white hover:file:bg-crevre-gold-dark"
+                    />
+                    <p className="text-xs text-crevre-charcoal/60">Upload multiple images. First image will be the main product image.</p>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* Pricing and Category */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-crevre-charcoal mb-2">
-                      Price ($)
+                      Price ($) *
                     </label>
                     <input
                       type="number"
@@ -467,9 +593,24 @@ const AdminPage = () => {
                       <option value="other">Other</option>
                     </select>
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                      Sale Status *
+                    </label>
+                    <select
+                      value={productForm.saleStatus}
+                      onChange={(e) => setProductForm({ ...productForm, saleStatus: e.target.value as 'for-sale' | 'preview-only' })}
+                      className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal transition-all duration-300 outline-none"
+                    >
+                      <option value="preview-only">Preview Only (Email Signup)</option>
+                      <option value="for-sale">For Sale (Add to Cart)</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* Status and Featured */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-crevre-charcoal mb-2">
                       Status
@@ -497,6 +638,72 @@ const AdminPage = () => {
                         Featured Product
                       </span>
                     </label>
+                  </div>
+                </div>
+
+                {/* SEO Section */}
+                <div className="border-t border-crevre-gold/20 pt-6">
+                  <h4 className="text-lg font-display font-semibold text-crevre-charcoal mb-4">
+                    SEO Optimization 🚀
+                  </h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                        SEO Title (for Google)
+                      </label>
+                      <input
+                        type="text"
+                        value={productForm.seo.title}
+                        onChange={(e) => setProductForm({ ...productForm, seo: { ...productForm.seo, title: e.target.value } })}
+                        className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                        placeholder="Enter SEO title (60 chars max)"
+                        maxLength={60}
+                      />
+                      <p className="text-xs text-crevre-charcoal/60 mt-1">{productForm.seo.title.length}/60 characters</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                        Meta Description (for Google)
+                      </label>
+                      <textarea
+                        value={productForm.seo.description}
+                        onChange={(e) => setProductForm({ ...productForm, seo: { ...productForm.seo, description: e.target.value } })}
+                        className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                        placeholder="Enter meta description for search results (160 chars max)"
+                        rows={2}
+                        maxLength={160}
+                      />
+                      <p className="text-xs text-crevre-charcoal/60 mt-1">{productForm.seo.description.length}/160 characters</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                        SEO Keywords (comma-separated)
+                      </label>
+                      <input
+                        type="text"
+                        value={productForm.seo.keywords}
+                        onChange={(e) => setProductForm({ ...productForm, seo: { ...productForm.seo, keywords: e.target.value } })}
+                        className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                        placeholder="fashion, streetwear, premium clothing, luxury"
+                      />
+                      <p className="text-xs text-crevre-charcoal/60 mt-1">Help your product rank higher in Google searches</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-crevre-charcoal mb-2">
+                        URL Slug
+                      </label>
+                      <input
+                        type="text"
+                        value={productForm.seo.slug}
+                        onChange={(e) => setProductForm({ ...productForm, seo: { ...productForm.seo, slug: e.target.value } })}
+                        className="w-full px-4 py-3 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                        placeholder="Auto-generated from product name"
+                      />
+                      <p className="text-xs text-crevre-charcoal/60 mt-1">Leave blank to auto-generate from product name</p>
+                    </div>
                   </div>
                 </div>
 

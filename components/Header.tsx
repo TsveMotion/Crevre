@@ -15,8 +15,14 @@ const Header = () => {
   }, [])
 
   const scrollToForm = () => {
-    const formElement = document.getElementById('signup-form')
-    formElement?.scrollIntoView({ behavior: 'smooth' })
+    // Scroll to hero section email input
+    const heroSection = document.querySelector('.hero-email-input')
+    if (heroSection) {
+      heroSection.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      // Fallback: scroll to hero section
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   return (

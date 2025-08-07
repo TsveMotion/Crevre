@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-crevre-charcoal border-t border-crevre-gold/20">
+    <footer className="bg-white border-t border-crevre-gold/20">
       <div className="section-padding py-16">
         <div className="max-w-6xl mx-auto">
           {/* Main Footer Content */}
@@ -17,36 +17,28 @@ const Footer = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-crevre-gold to-crevre-gold-dark rounded-sm flex items-center justify-center shadow-sm">
                   <span className="text-crevre-white font-display font-bold text-xl">C</span>
                 </div>
-                <span className="text-2xl font-display font-semibold tracking-wider text-crevre-white">
+                <span className="text-2xl font-display font-semibold tracking-wider text-crevre-charcoal">
                   CREVRE
                 </span>
               </div>
-              <p className="text-crevre-white/70 text-lg max-w-md mb-6 leading-relaxed font-light">
+              <p className="text-crevre-charcoal/70 text-lg max-w-md mb-6 leading-relaxed font-light">
                 Premium fashion that defines elegance. Every piece tells a story, 
                 every collection makes a statement. Join the community.
               </p>
               <div className="flex space-x-4">
                 <a 
-                  href="https://instagram.com/crevrewear" 
+                  href="https://www.instagram.com/crevre_wear/" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-crevre-gray border border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-crevre-gold hover:border-crevre-gold/50 transition-all duration-300"
+                  className="w-10 h-10 bg-crevre-gold/10 border border-crevre-gold/30 rounded-lg flex items-center justify-center text-crevre-charcoal hover:text-crevre-gold hover:border-crevre-gold transition-all duration-300"
                 >
                   📷
-                </a>
-                <a 
-                  href="https://tiktok.com/@crevrewear" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 bg-crevre-gray border border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-crevre-gold hover:border-crevre-gold/50 transition-all duration-300"
-                >
-                  🎵
                 </a>
                 <a 
                   href="https://twitter.com/crevrewear" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-crevre-gray border border-gray-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-crevre-gold hover:border-crevre-gold/50 transition-all duration-300"
+                  className="w-10 h-10 bg-crevre-gold/10 border border-crevre-gold/30 rounded-lg flex items-center justify-center text-crevre-charcoal hover:text-crevre-gold hover:border-crevre-gold transition-all duration-300"
                 >
                   🐦
                 </a>
@@ -55,7 +47,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-crevre-white font-display font-semibold text-lg mb-6">Quick Links</h4>
+              <h4 className="text-crevre-charcoal font-display font-semibold text-lg mb-6">Quick Links</h4>
               <ul className="space-y-4">
                 <li>
                   <button 
@@ -63,23 +55,23 @@ const Footer = () => {
                       const formElement = document.getElementById('signup-form')
                       formElement?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="text-gray-400 hover:text-crevre-gold transition-colors duration-300"
+                    className="text-crevre-charcoal/60 hover:text-crevre-gold transition-colors duration-300"
                   >
                     Join Drop List
                   </button>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-crevre-gold transition-colors duration-300">
+                  <a href="#" className="text-crevre-charcoal/60 hover:text-crevre-gold transition-colors duration-300">
                     About Crevre
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-crevre-gold transition-colors duration-300">
+                  <a href="#" className="text-crevre-charcoal/60 hover:text-crevre-gold transition-colors duration-300">
                     Size Guide
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-crevre-gold transition-colors duration-300">
+                  <a href="#" className="text-crevre-charcoal/60 hover:text-crevre-gold transition-colors duration-300">
                     Contact Us
                   </a>
                 </li>
@@ -88,10 +80,10 @@ const Footer = () => {
 
             {/* Legal */}
             <div>
-              <h4 className="text-white font-bold text-lg mb-6">Legal</h4>
+              <h4 className="text-crevre-charcoal font-display font-semibold text-lg mb-6">Legal</h4>
               <ul className="space-y-4">
                 <li>
-                  <a href="/privacy-policy" className="text-gray-400 hover:text-crevre-gold transition-colors duration-300">
+                  <a href="/privacy-policy" className="text-crevre-charcoal/60 hover:text-crevre-gold transition-colors duration-300">
                     Privacy Policy
                   </a>
                 </li>
@@ -120,24 +112,24 @@ const Footer = () => {
               <h4 className="text-crevre-gold font-bold text-lg mb-2">
                 🚀 Launch Countdown
               </h4>
-              <p className="text-white font-semibold text-xl">
-                August 9th, 2025 • Limited Quantities
+              <p className="text-crevre-charcoal font-semibold text-xl">
+                September 1st, 2025 • Limited Quantities
               </p>
-              <p className="text-gray-400 mt-2">
+              <p className="text-crevre-charcoal/60 mt-2">
                 Don't miss out on the drop everyone will be talking about
               </p>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-800">
-            <div className="text-gray-400 text-sm mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-crevre-gold/20">
+            <div className="text-crevre-charcoal/60 text-sm mb-4 md:mb-0">
               © {currentYear} Crevre. All rights reserved. Made with passion for streetwear culture.
             </div>
             <div className="flex items-center space-x-6 text-sm">
-              <span className="text-gray-400">🔒 Secure checkout</span>
-              <span className="text-gray-400">📦 Worldwide shipping</span>
-              <span className="text-gray-400">💯 Authentic guarantee</span>
+              <span className="text-crevre-charcoal/60">🔒 Secure checkout</span>
+              <span className="text-crevre-charcoal/60">📦 Worldwide shipping</span>
+              <span className="text-crevre-charcoal/60">💯 Authentic guarantee</span>
             </div>
           </div>
         </div>

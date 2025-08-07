@@ -73,8 +73,14 @@ const ValueProposition = () => {
             </p>
             <button
               onClick={() => {
-                const formElement = document.getElementById('signup-form')
-                formElement?.scrollIntoView({ behavior: 'smooth' })
+                // Scroll to hero section email input
+                const heroSection = document.querySelector('.hero-email-input')
+                if (heroSection) {
+                  heroSection.scrollIntoView({ behavior: 'smooth' })
+                } else {
+                  // Fallback: scroll to top
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }
               }}
               className="btn-primary"
             >
