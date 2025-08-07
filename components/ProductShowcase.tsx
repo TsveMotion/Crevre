@@ -110,11 +110,11 @@ const ProductShowcase = () => {
     <section className="section-padding py-20 bg-white">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-semibold text-crevre-charcoal mb-6">
+        <div className="text-center mb-12 sm:mb-16 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-semibold text-crevre-charcoal mb-4 sm:mb-6">
             Featured Collection
           </h2>
-          <p className="text-xl text-crevre-charcoal/70 max-w-2xl mx-auto font-light">
+          <p className="text-lg sm:text-xl text-crevre-charcoal/70 max-w-2xl mx-auto font-light">
             Premium pieces crafted for those who appreciate timeless elegance and contemporary style
           </p>
         </div>
@@ -124,11 +124,11 @@ const ProductShowcase = () => {
             <p className="text-crevre-charcoal/60 text-lg">No products available yet. Check back soon!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4">
             {products.map((product) => (
               <div
                 key={product._id}
-                className="group cursor-pointer bg-crevre-ivory/30 border border-crevre-gold/20 rounded-sm overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-105"
+                className="group cursor-pointer bg-crevre-ivory/30 border border-crevre-gold/20 rounded-sm overflow-hidden hover:shadow-xl transition-all duration-500 hover:scale-105 mx-auto w-full max-w-sm sm:max-w-none"
                 onClick={() => handleProductClick(product)}
               >
                 {/* Product Image */}
@@ -173,15 +173,15 @@ const ProductShowcase = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-6">
-                  <h3 className="text-xl font-display font-semibold text-crevre-charcoal mb-2 group-hover:text-crevre-gold transition-colors">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-display font-semibold text-crevre-charcoal mb-2 group-hover:text-crevre-gold transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-crevre-charcoal/70 text-sm mb-4 line-clamp-2 font-light">
+                  <p className="text-crevre-charcoal/70 text-sm mb-3 sm:mb-4 line-clamp-2 font-light">
                     {product.description || 'Premium quality piece from our exclusive collection'}
                   </p>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-display font-bold text-crevre-gold">
+                    <span className="text-xl sm:text-2xl font-display font-bold text-crevre-gold">
                       ${product.price}
                     </span>
                     <span className="text-xs text-crevre-charcoal/60 uppercase tracking-wide">
@@ -197,8 +197,8 @@ const ProductShowcase = () => {
 
       {/* Product Modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50" onClick={closeModal}>
-          <div className="bg-white rounded-sm max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-3 sm:p-4 z-50" onClick={closeModal}>
+          <div className="bg-white rounded-sm max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="relative">
               {/* Close Button */}
               <button
@@ -229,22 +229,22 @@ const ProductShowcase = () => {
               </div>
 
               {/* Product Details */}
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h2 className="text-3xl font-display font-semibold text-crevre-charcoal mb-2">
+              <div className="p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-col sm:flex-row sm:justify-between items-start mb-4">
+                  <div className="mb-3 sm:mb-0">
+                    <h2 className="text-2xl sm:text-3xl font-display font-semibold text-crevre-charcoal mb-2">
                       {selectedProduct.name}
                     </h2>
-                    <span className="text-3xl font-display font-bold text-crevre-gold">
+                    <span className="text-2xl sm:text-3xl font-display font-bold text-crevre-gold">
                       ${selectedProduct.price}
                     </span>
                   </div>
-                  <span className="bg-crevre-gold/10 text-crevre-gold px-4 py-2 rounded-sm text-sm font-medium">
+                  <span className="bg-crevre-gold/10 text-crevre-gold px-3 sm:px-4 py-1 sm:py-2 rounded-sm text-xs sm:text-sm font-medium">
                     {selectedProduct.category}
                   </span>
                 </div>
 
-                <p className="text-crevre-charcoal/80 mb-8 leading-relaxed">
+                <p className="text-crevre-charcoal/80 mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
                   {selectedProduct.description || 'Premium quality piece from our exclusive collection. Crafted with attention to detail and designed for those who appreciate timeless elegance.'}
                 </p>
 

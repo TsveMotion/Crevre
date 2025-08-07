@@ -60,7 +60,7 @@ const HeroSection = () => {
       <div className="relative z-20 text-center section-padding max-w-6xl mx-auto">
         <div className="animate-fade-in">
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display mb-8 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display mb-6 sm:mb-8 leading-tight">
             <span className="block text-crevre-charcoal font-light">Join the</span>
             <span className="block text-crevre-gold font-semibold tracking-wide">EXCLUSIVE</span>
             <span className="block text-crevre-charcoal font-light">Collection for</span>
@@ -68,7 +68,7 @@ const HeroSection = () => {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl sm:text-2xl lg:text-3xl text-crevre-charcoal/80 mb-12 max-w-4xl mx-auto font-light tracking-wide">
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-crevre-charcoal/80 mb-8 sm:mb-12 max-w-4xl mx-auto font-light tracking-wide px-4">
             Discover Timeless Elegance in Contemporary Fashion
           </p>
 
@@ -76,20 +76,20 @@ const HeroSection = () => {
           <LaunchCountdown />
 
           {/* Email Signup Form */}
-          <div className="max-w-lg mx-auto mb-8 hero-email-input">
-            <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-4">
+          <div className="max-w-lg mx-auto mb-6 sm:mb-8 hero-email-input px-4">
+            <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 sm:gap-4">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email for exclusive access"
-                className="flex-1 px-6 py-5 bg-white/90 border border-crevre-gold/30 rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/60 focus:outline-none focus:ring-2 focus:ring-crevre-gold focus:border-transparent text-xl shadow-sm font-medium"
+                className="w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/90 border border-crevre-gold/30 rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/60 focus:outline-none focus:ring-2 focus:ring-crevre-gold focus:border-transparent text-lg sm:text-xl shadow-sm font-medium"
                 required
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-primary text-lg px-8 py-4 whitespace-nowrap disabled:opacity-50"
+                className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-4 w-full sm:w-auto mx-auto disabled:opacity-50"
               >
                 {isSubmitting ? 'Joining...' : 'Join Launch List'}
               </button>
@@ -106,7 +106,7 @@ const HeroSection = () => {
           {/* Secondary CTA */}
           <button
             onClick={scrollToForm}
-            className="text-crevre-gold hover:text-crevre-gold-dark transition-colors duration-300 text-lg font-medium underline underline-offset-4"
+            className="text-crevre-gold hover:text-crevre-gold-dark transition-colors duration-300 text-base sm:text-lg font-medium underline underline-offset-4 mb-4"
           >
             Learn More About Collection
           </button>
