@@ -35,13 +35,12 @@ const Header = () => {
     >
       <div className="section-padding py-4 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-crevre-gold to-crevre-gold-dark rounded-sm flex items-center justify-center shadow-sm">
-            <span className="text-crevre-white font-display font-bold text-xl">C</span>
-          </div>
-          <span className="text-2xl font-display font-semibold tracking-wider text-crevre-charcoal">
-            CREVRE
-          </span>
+        <div className="flex items-center">
+          <img 
+            src="/LogoLong2.png" 
+            alt="Crevre Logo" 
+            className="h-8 sm:h-10 w-auto transition-all duration-300"
+          />
         </div>
 
         {/* Get Notified Button */}

@@ -42,6 +42,33 @@ const blogPosts = [
     date: '2024-07-25',
     readTime: '6 min read',
     category: 'Sustainability'
+  },
+  {
+    id: 'minimalist-fashion-guide',
+    title: 'The Art of Minimalist Fashion: Building a Timeless Wardrobe',
+    excerpt: 'Master the art of minimalist fashion with our comprehensive guide to building a curated wardrobe with versatile pieces.',
+    image: 'https://picsum.photos/400/300?random=4',
+    date: '2024-08-05',
+    readTime: '7 min read',
+    category: 'Style Guide'
+  },
+  {
+    id: 'fashion-week-insights-2024',
+    title: 'Fashion Week Insights 2024: Key Trends from Paris, Milan & New York',
+    excerpt: 'Get exclusive insights from Fashion Week 2024 and discover the key trends shaping the future of luxury fashion.',
+    image: 'https://picsum.photos/400/300?random=5',
+    date: '2024-08-03',
+    readTime: '9 min read',
+    category: 'Industry Insights'
+  },
+  {
+    id: 'color-psychology-fashion',
+    title: 'Color Psychology in Fashion: How Colors Influence Style & Perception',
+    excerpt: 'Discover the power of color psychology in fashion and how different colors influence perception, mood, and personal style.',
+    image: 'https://picsum.photos/400/300?random=6',
+    date: '2024-08-02',
+    readTime: '8 min read',
+    category: 'Psychology'
   }
 ]
 
