@@ -8,13 +8,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'crevre-black': '#0a0a0a',
+        'crevre-white': '#fefefe',
+        'crevre-ivory': '#faf9f6',
         'crevre-gold': '#D4AF37',
-        'crevre-gray': '#1a1a1a',
-        'crevre-accent': '#ff6b6b',
+        'crevre-gold-light': '#e8c547',
+        'crevre-gold-dark': '#b8941f',
+        'crevre-charcoal': '#1a1a1a',
+        'crevre-gray': '#f8f8f8',
+        'crevre-gray-dark': '#e5e5e5',
       },
       fontFamily: {
-        'display': ['Inter', 'system-ui', 'sans-serif'],
+        'display': ['Playfair Display', 'serif'],
         'body': ['Inter', 'system-ui', 'sans-serif'],
       },
       animation: {
@@ -32,8 +36,12 @@ module.exports = {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(212, 175, 55, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.1)' },
+          '50%': { boxShadow: '0 0 30px rgba(212, 175, 55, 0.2)' },
+        },
+        goldShimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
     },

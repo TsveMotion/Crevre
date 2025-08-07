@@ -6,24 +6,24 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-crevre-black border-t border-gray-800">
+    <footer className="bg-crevre-charcoal border-t border-crevre-gold/20">
       <div className="section-padding py-16">
         <div className="max-w-6xl mx-auto">
           {/* Main Footer Content */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {/* Brand Column */}
             <div className="lg:col-span-2">
-              <div className="flex items-center space-x-2 mb-6">
-                <div className="w-10 h-10 bg-crevre-gold rounded-lg flex items-center justify-center">
-                  <span className="text-crevre-black font-black text-xl">C</span>
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-crevre-gold to-crevre-gold-dark rounded-sm flex items-center justify-center shadow-sm">
+                  <span className="text-crevre-white font-display font-bold text-xl">C</span>
                 </div>
-                <span className="text-2xl font-black tracking-wider text-white">
+                <span className="text-2xl font-display font-semibold tracking-wider text-crevre-white">
                   CREVRE
                 </span>
               </div>
-              <p className="text-gray-400 text-lg max-w-md mb-6 leading-relaxed">
-                Premium streetwear that defines culture. Every piece tells a story, 
-                every drop makes a statement. Join the movement.
+              <p className="text-crevre-white/70 text-lg max-w-md mb-6 leading-relaxed font-light">
+                Premium fashion that defines elegance. Every piece tells a story, 
+                every collection makes a statement. Join the community.
               </p>
               <div className="flex space-x-4">
                 <a 
@@ -55,7 +55,7 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-white font-bold text-lg mb-6">Quick Links</h4>
+              <h4 className="text-crevre-white font-display font-semibold text-lg mb-6">Quick Links</h4>
               <ul className="space-y-4">
                 <li>
                   <button 

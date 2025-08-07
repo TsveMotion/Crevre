@@ -10,20 +10,15 @@ const HeroSection = () => {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background Image */}
+    <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-crevre-white via-crevre-ivory to-crevre-white">
+      {/* Background Decorative Elements */}
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-crevre-black/80 via-crevre-gray/60 to-crevre-black/90 z-10" />
-          {/* Placeholder for hero image */}
-          <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <div className="w-32 h-32 mx-auto mb-4 bg-crevre-gold/20 rounded-lg flex items-center justify-center">
-                <span className="text-4xl">👕</span>
-              </div>
-              <p className="text-sm">Hero Image Placeholder<br />1920x1080 recommended</p>
-            </div>
-          </div>
+          {/* Elegant geometric pattern */}
+          <div className="absolute top-20 right-20 w-64 h-64 border border-crevre-gold/20 rotate-45 rounded-lg" />
+          <div className="absolute bottom-32 left-16 w-32 h-32 bg-crevre-gold/5 rounded-full" />
+          <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-crevre-gold rounded-full animate-pulse" />
+          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-crevre-gold rounded-full animate-pulse" style={{animationDelay: '1s'}} />
         </div>
       </div>
 
@@ -31,22 +26,22 @@ const HeroSection = () => {
       <div className="relative z-20 text-center section-padding max-w-6xl mx-auto">
         <div className="animate-fade-in">
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black mb-6 leading-tight">
-            <span className="block text-white">Join the</span>
-            <span className="block text-crevre-gold animate-pulse-glow">EXCLUSIVE</span>
-            <span className="block text-white">Drop List for</span>
-            <span className="block text-crevre-gold font-black tracking-wider">CREVRE</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display mb-8 leading-tight">
+            <span className="block text-crevre-charcoal font-light">Join the</span>
+            <span className="block text-crevre-gold font-semibold tracking-wide">EXCLUSIVE</span>
+            <span className="block text-crevre-charcoal font-light">Collection for</span>
+            <span className="block text-crevre-gold font-bold tracking-wider">CREVRE</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl sm:text-2xl lg:text-3xl text-gray-300 mb-8 max-w-4xl mx-auto font-light">
-            Be the First to Access Limited Streetwear
+          <p className="text-xl sm:text-2xl lg:text-3xl text-crevre-charcoal/80 mb-12 max-w-4xl mx-auto font-light tracking-wide">
+            Discover Timeless Elegance in Contemporary Fashion
           </p>
 
           {/* Launch Date */}
-          <div className="inline-block bg-crevre-gold/10 border border-crevre-gold/30 rounded-full px-6 py-3 mb-8">
-            <p className="text-crevre-gold font-semibold text-lg">
-              🔥 Launching August 9th • Limited Quantities
+          <div className="inline-block bg-crevre-gold/10 border border-crevre-gold/30 rounded-sm px-8 py-4 mb-12 shadow-sm">
+            <p className="text-crevre-gold font-medium text-lg tracking-wide">
+              ✨ Launching August 9th • Exclusive Collection
             </p>
           </div>
 

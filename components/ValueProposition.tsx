@@ -5,44 +5,44 @@ import React from 'react'
 const ValueProposition = () => {
   const benefits = [
     {
-      icon: '⚡',
+      icon: '✨',
       title: 'Early Access',
-      description: 'Get first dibs on limited drops before they sell out to the public.'
+      description: 'Get first access to curated collections before they launch to the public.'
     },
     {
-      icon: '👀',
-      title: 'Sneak Peeks',
-      description: 'Behind-the-scenes looks at our design process and upcoming releases.'
+      icon: '🎨',
+      title: 'Curated Collections',
+      description: 'Exclusive looks at our design process and upcoming timeless pieces.'
     },
     {
-      icon: '🏷️',
-      title: 'Exclusive Discounts',
-      description: 'Member-only pricing and special offers you won\'t find anywhere else.'
+      icon: '💎',
+      title: 'Member Privileges',
+      description: 'VIP pricing and special member benefits exclusively for our community.'
     },
     {
-      icon: '🎯',
-      title: 'Limited Drops',
-      description: 'Access to rare, limited-quantity pieces that define streetwear culture.'
+      icon: '🏆',
+      title: 'Premium Quality',
+      description: 'Access to limited-edition pieces that define contemporary elegance.'
     }
   ]
 
   return (
-    <section className="section-padding py-20 bg-crevre-black">
+    <section className="section-padding py-20 bg-crevre-ivory">
       <div className="max-w-6xl mx-auto">
         {/* Main Value Prop */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-8">
-            Crevre isn't just <span className="text-crevre-gold">fashion</span> — it's <span className="text-crevre-gold">culture</span>
+          <h2 className="text-4xl lg:text-5xl font-display font-semibold text-crevre-charcoal mb-8">
+            Crevre isn't just <span className="text-crevre-gold">fashion</span> — it's <span className="text-crevre-gold">elegance</span>
           </h2>
           
-          <p className="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-            Get exclusive early access to our launch drop, discounts, and behind-the-scenes looks. 
-            Only for email insiders who understand that streetwear is more than clothing—it's a statement.
+          <p className="text-xl lg:text-2xl text-crevre-charcoal/80 max-w-4xl mx-auto mb-12 leading-relaxed font-light">
+            Get exclusive early access to our launch collection, member privileges, and curated content. 
+            Only for those who understand that fashion is more than clothing—it's timeless elegance.
           </p>
 
-          <div className="inline-block bg-gradient-to-r from-crevre-gold/20 to-transparent border border-crevre-gold/30 rounded-full px-8 py-4">
-            <span className="text-crevre-gold font-semibold text-lg">
-              💎 Premium Members Get 48-Hour Head Start
+          <div className="inline-block bg-crevre-white border border-crevre-gold/30 rounded-sm px-8 py-4 shadow-md">
+            <span className="text-crevre-gold font-medium text-lg">
+              ✨ Premium Members Get 48-Hour Head Start
             </span>
           </div>
         </div>
@@ -52,24 +52,24 @@ const ValueProposition = () => {
           {benefits.map((benefit, index) => (
             <div 
               key={index}
-              className="bg-crevre-gray border border-gray-700 rounded-xl p-6 text-center hover:border-crevre-gold/50 transition-all duration-300 hover:transform hover:scale-105"
+              className="bg-crevre-white border border-crevre-gold/20 rounded-sm p-8 text-center hover:border-crevre-gold/40 hover:shadow-lg transition-all duration-300"
             >
-              <div className="text-4xl mb-4">{benefit.icon}</div>
-              <h3 className="text-xl font-bold text-white mb-3">{benefit.title}</h3>
-              <p className="text-gray-400 leading-relaxed">{benefit.description}</p>
+              <div className="text-4xl mb-6">{benefit.icon}</div>
+              <h3 className="text-xl font-display font-semibold text-crevre-charcoal mb-4">{benefit.title}</h3>
+              <p className="text-crevre-charcoal/70 leading-relaxed font-light">{benefit.description}</p>
             </div>
           ))}
         </div>
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-crevre-gold/10 via-crevre-gold/5 to-transparent border border-crevre-gold/20 rounded-2xl p-8 max-w-3xl mx-auto">
-            <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
-              Ready to join the culture?
+          <div className="bg-crevre-white border border-crevre-gold/20 rounded-sm p-12 max-w-3xl mx-auto shadow-lg">
+            <h3 className="text-2xl lg:text-3xl font-display font-semibold text-crevre-charcoal mb-6">
+              Ready to join the exclusive community?
             </h3>
-            <p className="text-gray-300 mb-6">
-              Over 2,500 streetwear enthusiasts are already on the list. 
-              Don't miss out on the drop that everyone will be talking about.
+            <p className="text-crevre-charcoal/80 mb-8 font-light leading-relaxed">
+              Over 2,500 discerning individuals are already on the list. 
+              Don't miss the collection that defines contemporary elegance.
             </p>
             <button
               onClick={() => {
@@ -78,7 +78,7 @@ const ValueProposition = () => {
               }}
               className="btn-primary"
             >
-              Secure Your Spot
+              Secure Your Access
             </button>
           </div>
         </div>
