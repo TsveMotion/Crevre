@@ -204,9 +204,11 @@ const AdminPage = () => {
 
       if (response.ok) {
         const data = await response.json()
+        // Handle the new MongoDB image response format
+        const newImageUrls = data.images ? data.images.map((img: any) => img.url) : []
         setProductForm({
           ...productForm,
-          images: [...productForm.images, ...data.urls]
+          images: [...productForm.images, ...newImageUrls]
         })
       } else {
         alert('Failed to upload images')

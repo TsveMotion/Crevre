@@ -54,6 +54,18 @@ export interface CollectionDoc {
   updatedAt: Date
 }
 
+export interface ImageDoc {
+  filename: string
+  originalName: string
+  url: string // Public URL to access the image
+  mimeType: string
+  size: number // File size in bytes
+  uploadedAt: Date
+  uploadedBy?: string // Admin username or identifier
+  tags?: string[]
+  alt?: string // Alt text for accessibility
+}
+
 // Client-side interfaces (with string _id for easier JSON serialization)
 export interface EmailSubscriber extends EmailSubscriberDoc {
   _id: string
@@ -67,9 +79,14 @@ export interface Collection extends CollectionDoc {
   _id: string
 }
 
+export interface Image extends ImageDoc {
+  _id: string
+}
+
 // Collection names
 export const COLLECTIONS = {
   SUBSCRIBERS: 'subscribers',
   PRODUCTS: 'products',
-  COLLECTIONS: 'collections'
+  COLLECTIONS: 'collections',
+  IMAGES: 'images'
 } as const
