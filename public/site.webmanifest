@@ -1,7 +1,7 @@
 {
   "name": "Crevre - Premium Fashion Collection",
   "short_name": "Crevre",
-  "description": "Discover Crevre's exclusive premium fashion collection launching September 1st, 2024. Timeless elegance meets contemporary style.",
+  "description": "Discover Crevre's exclusive premium fashion collection launching September 1st, 2025. Timeless elegance meets contemporary style.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
@@ -10,12 +10,12 @@
   "categories": ["fashion", "shopping", "lifestyle"],
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/LogoLong2.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "/LogoLong.png",
       "sizes": "512x512",
       "type": "image/png"
     }

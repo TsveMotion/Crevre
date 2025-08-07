@@ -182,7 +182,7 @@ const ProductShowcase = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-xl sm:text-2xl font-display font-bold text-crevre-gold">
-                      ${product.price}
+                      £{product.price}
                     </span>
                     <span className="text-xs text-crevre-charcoal/60 uppercase tracking-wide">
                       {product.category}
@@ -236,7 +236,7 @@ const ProductShowcase = () => {
                       {selectedProduct.name}
                     </h2>
                     <span className="text-2xl sm:text-3xl font-display font-bold text-crevre-gold">
-                      ${selectedProduct.price}
+                      £{selectedProduct.price}
                     </span>
                   </div>
                   <span className="bg-crevre-gold/10 text-crevre-gold px-3 sm:px-4 py-1 sm:py-2 rounded-sm text-xs sm:text-sm font-medium">

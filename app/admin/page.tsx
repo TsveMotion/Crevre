@@ -35,6 +35,8 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState<'products' | 'subscribers'>('products')
   const [products, setProducts] = useState<Product[]>([])
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
+  const [filteredSubscribers, setFilteredSubscribers] = useState<Subscriber[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(false)
   const [showProductForm, setShowProductForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
@@ -86,6 +88,21 @@ const AdminPage = () => {
       fetchSubscribers()
     }
   }, [activeTab, isAuthenticated])
+  
+  // Filter subscribers when search query changes
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredSubscribers(subscribers)
+    } else {
+      const query = searchQuery.toLowerCase()
+      const filtered = subscribers.filter(subscriber => 
+        subscriber.email.toLowerCase().includes(query) ||
+        subscriber.source.toLowerCase().includes(query) ||
+        subscriber.status.toLowerCase().includes(query)
+      )
+      setFilteredSubscribers(filtered)
+    }
+  }, [searchQuery, subscribers])
 
   const checkAuth = async () => {
     try {
@@ -123,6 +140,7 @@ const AdminPage = () => {
       if (response.ok) {
         const data = await response.json()
         setSubscribers(data.subscribers)
+        setFilteredSubscribers(data.subscribers)
       }
     } catch (error) {
       console.error('Failed to fetch subscribers:', error)
@@ -267,6 +285,50 @@ const AdminPage = () => {
     setShowProductForm(false)
   }
 
+  const handleDeleteSubscriber = async (subscriberId: string) => {
+    if (!confirm('Are you sure you want to delete this subscriber?')) return
+
+    try {
+      const response = await fetch(`/api/subscribers/${subscriberId}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        await fetchSubscribers()
+      } else {
+        alert('Failed to delete subscriber')
+      }
+    } catch (error) {
+      console.error('Delete error:', error)
+      alert('Network error occurred')
+    }
+  }
+
+  const exportSubscribersToCSV = () => {
+    // Create CSV content
+    const headers = ['Email', 'Status', 'Source', 'Subscribed Date']
+    const csvContent = [
+      headers.join(','),
+      ...filteredSubscribers.map(sub => [
+        sub.email,
+        sub.status,
+        sub.source,
+        new Date(sub.subscribedAt).toLocaleDateString()
+      ].join(','))
+    ].join('\n')
+
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.setAttribute('href', url)
+    link.setAttribute('download', `crevre-subscribers-${new Date().toISOString().split('T')[0]}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const handleLogout = async () => {
     try {
       await fetch('/admin/auth', { method: 'DELETE' })
@@ -385,7 +447,7 @@ const AdminPage = () => {
                           {product.description || 'No description'}
                         </p>
                         <div className="flex items-center gap-4 text-sm text-crevre-charcoal/60">
-                          <span className="font-medium text-crevre-gold">${product.price}</span>
+                          <span className="font-medium text-crevre-gold">£{product.price}</span>
                           <span>Category: {product.category}</span>
                           <span>Created: {new Date(product.createdAt).toLocaleDateString()}</span>
                         </div>
@@ -420,9 +482,43 @@ const AdminPage = () => {
         {/* Subscribers Tab */}
         {activeTab === 'subscribers' && (
           <div>
-            <h2 className="text-2xl font-display font-semibold text-crevre-charcoal mb-6">
-              Email Subscribers
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-display font-semibold text-crevre-charcoal">
+                Email Subscribers
+              </h2>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => exportSubscribersToCSV()}
+                  className="bg-crevre-charcoal hover:bg-crevre-charcoal/80 text-white px-4 py-2 rounded-sm text-sm transition-all duration-200 flex items-center gap-2"
+                >
+                  <span>Export CSV</span>
+                </button>
+              </div>
+            </div>
+            
+            {/* Search Bar */}
+            <div className="mb-6">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search subscribers by email, source, or status..."
+                  className="w-full px-4 py-3 pl-10 border-2 border-crevre-gray-dark focus:border-crevre-gold rounded-sm text-crevre-charcoal placeholder-crevre-charcoal/50 transition-all duration-300 outline-none"
+                />
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-crevre-charcoal/50">
+                  🔍
+                </div>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-crevre-charcoal/50 hover:text-crevre-charcoal"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
             
             {loading ? (
               <div className="text-center py-12">
@@ -447,10 +543,13 @@ const AdminPage = () => {
                         <th className="px-6 py-4 text-left text-sm font-display font-semibold text-crevre-charcoal">
                           Subscribed
                         </th>
+                        <th className="px-6 py-4 text-center text-sm font-display font-semibold text-crevre-charcoal">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-crevre-gold/10">
-                      {subscribers.map((subscriber) => (
+                      {filteredSubscribers.map((subscriber) => (
                         <tr key={subscriber._id} className="hover:bg-crevre-ivory/50 transition-colors duration-200">
                           <td className="px-6 py-4 text-sm text-crevre-charcoal font-medium">
                             {subscriber.email}
@@ -468,14 +567,26 @@ const AdminPage = () => {
                           <td className="px-6 py-4 text-sm text-crevre-charcoal/70">
                             {new Date(subscriber.subscribedAt).toLocaleDateString()}
                           </td>
+                          <td className="px-6 py-4 text-center">
+                            <button
+                              onClick={() => handleDeleteSubscriber(subscriber._id)}
+                              className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-sm text-xs transition-all duration-200"
+                            >
+                              Delete
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
-                {subscribers.length === 0 && (
+                {filteredSubscribers.length === 0 && (
                   <div className="text-center py-12 text-crevre-charcoal/60">
-                    <p className="font-light">No subscribers yet. Share your landing page to get started!</p>
+                    {subscribers.length === 0 ? (
+                      <p className="font-light">No subscribers yet. Share your landing page to get started!</p>
+                    ) : (
+                      <p className="font-light">No subscribers match your search criteria.</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -563,7 +674,7 @@ const AdminPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-crevre-charcoal mb-2">
-                      Price ($) *
+                      Price (£) *
                     </label>
                     <input
                       type="number"
