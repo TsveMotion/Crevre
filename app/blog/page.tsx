@@ -1,19 +1,9 @@
-import React from 'react'
-import type { Metadata } from 'next'
+'use client'
+
+import React, { useState } from 'react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Link from 'next/link'
-
-export const metadata: Metadata = {
-  title: 'Crevre Blog - Fashion Insights & Style Trends | Premium Fashion Content',
-  description: 'Discover the latest fashion trends, style guides, and luxury fashion insights from Crevre. Expert advice on contemporary elegance, premium streetwear, and timeless fashion.',
-  keywords: 'fashion blog, style trends, luxury fashion, fashion insights, premium streetwear, contemporary fashion, fashion guide, style advice, fashion news, luxury brands',
-  openGraph: {
-    title: 'Crevre Blog - Fashion Insights & Style Trends',
-    description: 'Discover the latest fashion trends and luxury fashion insights from Crevre.',
-    type: 'website',
-  },
-}
 
 const blogPosts = [
   {

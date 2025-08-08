@@ -5,8 +5,16 @@ import { ObjectId } from 'mongodb'
 export interface EmailSubscriberDoc {
   email: string
   subscribedAt: Date
-  source: string // 'landing-page', 'admin', etc.
+  lastUpdated: Date
+  source: string // 'landing-page', 'admin', 'product-interest', 'general-signup', etc.
   status: 'active' | 'unsubscribed'
+  productInterests?: string[] // Array of product names user is interested in
+  tags?: string[] // Custom tags for segmentation
+  metadata?: {
+    ipAddress?: string
+    userAgent?: string
+    referrer?: string
+  }
   preferences?: {
     earlyAccess: boolean
     memberUpdates: boolean
