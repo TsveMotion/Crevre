@@ -16,6 +16,17 @@ type User = {
   isAdmin: boolean
 }
 
+// Database User type
+type DatabaseUser = {
+  _id: string
+  firstName: string
+  lastName: string
+  email: string
+  isAdmin: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 // Admin data types
 interface Product {
   _id: string
@@ -60,11 +71,14 @@ const AccountPage = () => {
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [formMessage, setFormMessage] = useState('')
 
-  // Admin state management
-  const [activeAdminTab, setActiveAdminTab] = useState<'products' | 'subscribers'>('products')
+  // Admin and user management state
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false)
+  const [activeAdminTab, setActiveAdminTab] = useState<'products' | 'subscribers' | 'users'>('products')
   const [products, setProducts] = useState<Product[]>([])
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [filteredSubscribers, setFilteredSubscribers] = useState<Subscriber[]>([])
+  const [users, setUsers] = useState<DatabaseUser[]>([])
+  const [filteredUsers, setFilteredUsers] = useState<DatabaseUser[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [adminLoading, setAdminLoading] = useState(false)
   const [showProductForm, setShowProductForm] = useState(false)
@@ -267,27 +281,39 @@ const AccountPage = () => {
 
   // Admin useEffects
   useEffect(() => {
-    if (currentUser?.isAdmin && activeAdminTab === 'products') {
-      fetchProducts()
-    } else if (currentUser?.isAdmin && activeAdminTab === 'subscribers') {
-      fetchSubscribers()
+    if (currentUser?.isAdmin && showAdminDashboard) {
+      if (activeAdminTab === 'products') {
+        fetchProducts()
+      } else if (activeAdminTab === 'subscribers') {
+        fetchSubscribers()
+      } else if (activeAdminTab === 'users') {
+        fetchUsers()
+      }
     }
-  }, [activeAdminTab, currentUser])
+  }, [activeAdminTab, currentUser, showAdminDashboard])
   
-  // Filter subscribers when search query changes
+  // Filter subscribers and users when search query changes
   useEffect(() => {
     if (searchQuery.trim() === '') {
       setFilteredSubscribers(subscribers)
+      setFilteredUsers(users)
     } else {
       const query = searchQuery.toLowerCase()
-      const filtered = subscribers.filter(subscriber => 
+      const filteredSubs = subscribers.filter(subscriber => 
         subscriber.email.toLowerCase().includes(query) ||
         subscriber.source.toLowerCase().includes(query) ||
         subscriber.status.toLowerCase().includes(query)
       )
-      setFilteredSubscribers(filtered)
+      setFilteredSubscribers(filteredSubs)
+      
+      const filteredUsrs = users.filter(user => 
+        user.email.toLowerCase().includes(query) ||
+        user.firstName.toLowerCase().includes(query) ||
+        user.lastName.toLowerCase().includes(query)
+      )
+      setFilteredUsers(filteredUsrs)
     }
-  }, [searchQuery, subscribers])
+  }, [searchQuery, subscribers, users])
 
   // Admin functions
   const fetchProducts = async () => {
@@ -317,6 +343,63 @@ const AccountPage = () => {
       console.error('Failed to fetch subscribers:', error)
     }
     setAdminLoading(false)
+  }
+
+  const fetchUsers = async () => {
+    setAdminLoading(true)
+    try {
+      const response = await fetch('/api/users')
+      if (response.ok) {
+        const data = await response.json()
+        setUsers(data.users)
+        setFilteredUsers(data.users)
+      }
+    } catch (error) {
+      console.error('Failed to fetch users:', error)
+    }
+    setAdminLoading(false)
+  }
+
+  const deleteSubscriber = async (subscriberId: string) => {
+    if (!confirm('Are you sure you want to delete this subscriber?')) return
+    
+    try {
+      const response = await fetch(`/api/subscribers/${subscriberId}`, {
+        method: 'DELETE'
+      })
+      
+      if (response.ok) {
+        // Refresh subscribers list
+        fetchSubscribers()
+        alert('Subscriber deleted successfully')
+      } else {
+        alert('Failed to delete subscriber')
+      }
+    } catch (error) {
+      console.error('Failed to delete subscriber:', error)
+      alert('Failed to delete subscriber')
+    }
+  }
+
+  const deleteUser = async (userId: string) => {
+    if (!confirm('Are you sure you want to delete this user?')) return
+    
+    try {
+      const response = await fetch(`/api/users?id=${userId}`, {
+        method: 'DELETE'
+      })
+      
+      if (response.ok) {
+        // Refresh users list
+        fetchUsers()
+        alert('User deleted successfully')
+      } else {
+        alert('Failed to delete user')
+      }
+    } catch (error) {
+      console.error('Failed to delete user:', error)
+      alert('Failed to delete user')
+    }
   }
 
   const handleProductSubmit = async (e: React.FormEvent) => {
@@ -601,40 +684,78 @@ const AccountPage = () => {
                 </div>
               </div>
 
-              {/* Admin Dashboard */}
+              {/* Admin Access */}
               {currentUser?.isAdmin && (
-                <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 rounded-lg p-8 mb-16">
-                  <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-3xl font-bold text-crevre-charcoal tracking-wide">Admin Dashboard</h2>
-                    <div className="flex items-center space-x-4">
-                      <span className="px-3 py-1 bg-red-600 text-white text-sm font-medium rounded-full">
-                        Full Access
-                      </span>
+                <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-crevre-gold rounded-lg p-12 mb-16 text-center">
+                  <div className="w-24 h-24 bg-crevre-gold rounded-full flex items-center justify-center mx-auto mb-8">
+                    <span className="text-4xl text-crevre-charcoal">⚡</span>
+                  </div>
+                  <h2 className="text-3xl font-bold text-white mb-4 tracking-wide">Administrator Access</h2>
+                  <p className="text-gray-300 mb-8 text-lg">Manage products, users, and email subscribers</p>
+                  <Link
+                    href="/account/admin"
+                    className="inline-block px-8 py-4 bg-crevre-gold hover:bg-crevre-gold-dark text-crevre-charcoal font-bold text-lg rounded-sm transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  >
+                    View ADMIN Dashboard
+                  </Link>
+                </div>
+              )}
+
+              {/* Admin Dashboard */}
+              {currentUser?.isAdmin && showAdminDashboard && (
+                <div className="bg-white border border-gray-200 rounded-lg shadow-lg mb-16">
+                  <div className="bg-gray-900 text-white p-8 rounded-t-lg">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-crevre-gold rounded-full flex items-center justify-center">
+                          <span className="text-2xl text-crevre-charcoal">⚡</span>
+                        </div>
+                        <div>
+                          <h2 className="text-3xl font-bold tracking-wide">CREVRE Admin Dashboard</h2>
+                          <p className="text-gray-300">Complete management control</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setShowAdminDashboard(false)}
+                        className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-sm transition-colors"
+                      >
+                        Close Dashboard
+                      </button>
                     </div>
                   </div>
 
                   {/* Admin Tab Navigation */}
-                  <div className="border-b border-gray-200 mb-6">
-                    <nav className="-mb-px flex space-x-8">
+                  <div className="bg-gray-50 p-6">
+                    <nav className="flex space-x-1">
                       <button
                         onClick={() => setActiveAdminTab('products')}
-                        className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                        className={`px-6 py-3 rounded-lg font-medium text-sm transition-all ${
                           activeAdminTab === 'products'
-                            ? 'border-red-500 text-red-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            ? 'bg-crevre-gold text-crevre-charcoal shadow-md'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white'
                         }`}
                       >
                         Products ({products.length})
                       </button>
                       <button
                         onClick={() => setActiveAdminTab('subscribers')}
-                        className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                        className={`px-6 py-3 rounded-lg font-medium text-sm transition-all ${
                           activeAdminTab === 'subscribers'
-                            ? 'border-red-500 text-red-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            ? 'bg-crevre-gold text-crevre-charcoal shadow-md'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white'
                         }`}
                       >
                         Email List ({subscribers.length})
+                      </button>
+                      <button
+                        onClick={() => setActiveAdminTab('users')}
+                        className={`px-6 py-3 rounded-lg font-medium text-sm transition-all ${
+                          activeAdminTab === 'users'
+                            ? 'bg-crevre-gold text-crevre-charcoal shadow-md'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-white'
+                        }`}
+                      >
+                        Users ({users.length})
                       </button>
                     </nav>
                   </div>
@@ -958,14 +1079,15 @@ const AccountPage = () => {
                           </div>
                         ) : (
                           <div className="bg-white rounded-lg border border-gray-200">
-                            <div className="grid grid-cols-4 gap-4 p-4 bg-gray-50 font-medium text-sm text-gray-600 border-b">
+                            <div className="grid grid-cols-5 gap-4 p-4 bg-gray-50 font-medium text-sm text-gray-600 border-b">
                               <div>Email</div>
                               <div>Status</div>
                               <div>Source</div>
                               <div>Subscribed Date</div>
+                              <div>Actions</div>
                             </div>
                             {filteredSubscribers.map((subscriber) => (
-                              <div key={subscriber._id} className="grid grid-cols-4 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50">
+                              <div key={subscriber._id} className="grid grid-cols-5 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 items-center">
                                 <div className="text-crevre-charcoal">{subscriber.email}</div>
                                 <div>
                                   <span className={`px-2 py-1 rounded text-xs ${
@@ -977,6 +1099,14 @@ const AccountPage = () => {
                                 <div className="text-crevre-charcoal/70">{subscriber.source}</div>
                                 <div className="text-crevre-charcoal/70">
                                   {new Date(subscriber.subscribedAt).toLocaleDateString()}
+                                </div>
+                                <div>
+                                  <button
+                                    onClick={() => deleteSubscriber(subscriber._id)}
+                                    className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors"
+                                  >
+                                    Delete
+                                  </button>
                                 </div>
                               </div>
                             ))}
@@ -1001,6 +1131,109 @@ const AccountPage = () => {
                             {subscribers.filter(s => s.status === 'unsubscribed').length}
                           </div>
                           <div className="text-sm text-crevre-charcoal/60">Unsubscribed</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Users Tab */}
+                  {activeAdminTab === 'users' && (
+                    <div className="p-8">
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-2xl font-bold text-crevre-charcoal">User Management</h3>
+                        <div className="text-sm text-gray-600">
+                          Total Users: {users.length}
+                        </div>
+                      </div>
+
+                      {/* Search */}
+                      <div className="mb-6">
+                        <input
+                          type="text"
+                          placeholder="Search users..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-crevre-gold"
+                        />
+                      </div>
+
+                      {/* Users List */}
+                      <div className="space-y-4">
+                        {adminLoading ? (
+                          <div className="text-center py-8">
+                            <div className="w-8 h-8 border-4 border-crevre-gold border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                            <p className="text-crevre-charcoal">Loading users...</p>
+                          </div>
+                        ) : filteredUsers.length === 0 ? (
+                          <div className="text-center py-8">
+                            <p className="text-gray-500">
+                              {searchQuery ? 'No users match your search.' : 'No users found.'}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="bg-white rounded-lg border border-gray-200">
+                            <div className="grid grid-cols-6 gap-4 p-4 bg-gray-50 font-medium text-sm text-gray-600 border-b">
+                              <div>Name</div>
+                              <div>Email</div>
+                              <div>Role</div>
+                              <div>Created</div>
+                              <div>Status</div>
+                              <div>Actions</div>
+                            </div>
+                            {filteredUsers.map((user) => (
+                              <div key={user._id} className="grid grid-cols-6 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 items-center">
+                                <div className="text-crevre-charcoal">
+                                  {user.firstName} {user.lastName}
+                                </div>
+                                <div className="text-crevre-charcoal">{user.email}</div>
+                                <div>
+                                  <span className={`px-2 py-1 rounded text-xs ${
+                                    user.isAdmin ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                                  }`}>
+                                    {user.isAdmin ? 'Admin' : 'User'}
+                                  </span>
+                                </div>
+                                <div className="text-crevre-charcoal/70">
+                                  {new Date(user.createdAt).toLocaleDateString()}
+                                </div>
+                                <div>
+                                  <span className="px-2 py-1 rounded text-xs bg-green-100 text-green-800">
+                                    Active
+                                  </span>
+                                </div>
+                                <div>
+                                  {!user.isAdmin && (
+                                    <button
+                                      onClick={() => deleteUser(user._id)}
+                                      className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors"
+                                    >
+                                      Delete
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Users Summary */}
+                      <div className="mt-6 grid grid-cols-3 gap-4">
+                        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                          <div className="text-2xl font-bold text-crevre-charcoal">{users.length}</div>
+                          <div className="text-sm text-crevre-charcoal/60">Total Users</div>
+                        </div>
+                        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                          <div className="text-2xl font-bold text-red-600">
+                            {users.filter(u => u.isAdmin).length}
+                          </div>
+                          <div className="text-sm text-crevre-charcoal/60">Admins</div>
+                        </div>
+                        <div className="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                          <div className="text-2xl font-bold text-blue-600">
+                            {users.filter(u => !u.isAdmin).length}
+                          </div>
+                          <div className="text-sm text-crevre-charcoal/60">Regular Users</div>
                         </div>
                       </div>
                     </div>

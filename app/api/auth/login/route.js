@@ -52,7 +52,7 @@ export async function POST(request) {
       lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin || false,
-      joinedAt: user.createdAt?.toISOString() || new Date().toISOString()
+      joinedAt: user.createdAt ? (typeof user.createdAt === 'string' ? user.createdAt : user.createdAt.toISOString()) : new Date().toISOString()
     }
 
     return NextResponse.json({
